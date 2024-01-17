@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "bayes-abund"
+version = "0.1.0"
+description = ""
+authors = ["synedraacus <alexeymorozov1991@gmail.com>"]
+readme = "README.md"
+packages = [{include = "bayes_abund"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytest = "^7.4.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
