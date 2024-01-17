@@ -1,13 +1,14 @@
 """
 Simple suffix tree implementation on dicts
 """
-import copy
+
+
 class KmerTreeException(Exception):
     pass
 
 
 class KmerTree:
-    def __init__(self, k=4, alphabet='ACTG', sequence='ACTGACTG'):
+    def __init__(self, k=4, alphabet="ACTG", sequence="ACTGACTG"):
         self.k = k
         self.alphabet = alphabet
         # TODO: check that sequence is from correct alphabet here and elsewhere
@@ -19,7 +20,7 @@ class KmerTree:
     def _populate_dict(self, sequence):
         self.kmer_dict = dict()
         for i in range(len(sequence) - self.k + 1):
-            kmer = sequence[i: i + self.k]
+            kmer = sequence[i : i + self.k]
             focus = self.kmer_dict
             for letter in kmer[:-1]:
                 if letter not in focus:
@@ -36,7 +37,9 @@ class KmerTree:
         Return the number of times a given kmer was present in training seq
         """
         if len(kmer) != self.k:
-            raise KmerTreeException('Requesting count of {len(kmer)}-mer from tree of {self.k}-mers')
+            raise KmerTreeException(
+                "Requesting count of {len(kmer)}-mer from tree of {self.k}-mers"
+            )
         focus = self.kmer_dict
         for letter in kmer[:-1]:
             if letter not in focus:
@@ -68,7 +71,7 @@ class KmerTree:
         prob = 1.0
         pseudoprob = pseudocount / self.kmer_count
         for i in range(len(sequence) - self.k + 1):
-            kmer_prob = self.get_freq(sequence[i: i + self.k])
+            kmer_prob = self.get_freq(sequence[i : i + self.k])
             if kmer_prob > 0:
                 prob *= kmer_prob
             else:
