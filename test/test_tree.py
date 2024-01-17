@@ -1,8 +1,9 @@
 """
 Tests
 """
+import pytest
 
-from src.tree import KmerTree
+from src.tree import KmerTree, KmerTreeException
 
 
 def test_tree_gen():
@@ -39,3 +40,17 @@ def test_pseudocount_effect():
     assert t.get_seq_prob("CACCGG", pseudocount=0.2) > t.get_seq_prob(
         "CACCGG", pseudocount=0.1
     )
+
+
+def test_init_exceptions():
+    with pytest.raises(KmerTreeException):
+        KmerTree(3, "ACTG", "ACTGACTGU\n")
+
+
+def test_method_exceptions():
+    t = KmerTree(3, "ACTG", "ACTGACTGACTG")
+    with pytest.raises(KmerTreeException):
+        # Wrong k
+        t.get_count("ACTG")
+    with pytest.raises(KmerTreeException):
+        t.get_seq_prob("ACUGACUUUC")

@@ -10,8 +10,11 @@ class KmerTreeException(Exception):
 class KmerTree:
     def __init__(self, k=4, alphabet="ACTG", sequence="ACTGACTG"):
         self.k = k
-        self.alphabet = alphabet
-        # TODO: check that sequence is from correct alphabet here and elsewhere
+        self.alphabet = set(alphabet)
+        if not set(sequence).issubset(self.alphabet):
+            raise KmerTreeException(
+                "Sequence alphabet is not a subset of Tree alphabet"
+            )
         self._populate_dict(sequence)
 
     # TODO: a method for adding sequences to existing KmerTree instances
@@ -19,6 +22,10 @@ class KmerTree:
 
     def _populate_dict(self, sequence):
         self.kmer_dict = dict()
+        if not set(sequence).issubset(self.alphabet):
+            raise KmerTreeException(
+                "Sequence alphabet is not a subset of Tree alphabet"
+            )
         for i in range(len(sequence) - self.k + 1):
             kmer = sequence[i : i + self.k]
             focus = self.kmer_dict
@@ -34,7 +41,9 @@ class KmerTree:
 
     def get_count(self, kmer: str) -> int:
         """
-        Return the number of times a given kmer was present in training seq
+        Return the number of times a given kmer was present in training seq(s).
+
+        Note that 0 is returned for kmers with incorrect alphabet
         """
         if len(kmer) != self.k:
             raise KmerTreeException(
@@ -68,6 +77,10 @@ class KmerTree:
         this should be in (0.0, 1.0) range, non-inclusively. The lesser the
         value, the less probability is assigned.
         """
+        if not set(sequence).issubset(self.alphabet):
+            raise KmerTreeException(
+                "Sequence alphabet is not a subset of Tree alphabet"
+            )
         prob = 1.0
         pseudoprob = pseudocount / self.kmer_count
         for i in range(len(sequence) - self.k + 1):
