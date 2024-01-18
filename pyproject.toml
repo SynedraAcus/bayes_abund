@@ -9,6 +9,7 @@ packages = [{include = "bayes_abund"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 pytest = "^7.4.4"
+biopython = "^1.83"
 
 
 [tool.poetry.group.dev.dependencies]
