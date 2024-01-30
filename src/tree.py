@@ -15,13 +15,20 @@ class KmerTree:
             raise KmerTreeException(
                 "Sequence alphabet is not a subset of Tree alphabet"
             )
-        self._populate_dict(sequence)
-
-    # TODO: a method for adding sequences to existing KmerTree instances
-    # Intended to use with higher taxa like eg genera
-
-    def _populate_dict(self, sequence):
         self.kmer_dict = dict()
+        self.kmer_count = 0
+        self.add_sequence(sequence)
+
+    # TODO: skip N gracefully
+    def add_sequence(self, sequence: str):
+        """
+        Add a sequence to the k-mer distribution.
+
+        Extracts all k-mer frequencies from a sequence and adds them to self,
+        updating k-mer count as appropriate. This method is meant for collecting
+        data from multiple sequences, and is called at tree creation
+        :return:
+        """
         if not set(sequence).issubset(self.alphabet):
             raise KmerTreeException(
                 "Sequence alphabet is not a subset of Tree alphabet"

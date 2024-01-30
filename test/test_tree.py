@@ -14,6 +14,15 @@ def test_tree_gen():
     assert t.get_count("GTG") == 0
 
 
+def test_seq_addition():
+    t = KmerTree(3, "ACTG", "ACACACC")
+    t.add_sequence("ACAC")
+    assert t.get_count("ACA") == 3
+    assert t.get_count("CAC") == 3
+    assert t.get_count("ACC") == 1
+    assert t.get_count("GTG") == 0
+
+
 def test_freq():
     t = KmerTree(3, "ACTG", "ACACACC")
     assert t.get_freq("ACA") == 0.4
