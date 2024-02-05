@@ -40,10 +40,12 @@ except ValueError:
 ################################################################################
 
 distributions = {}
+genera_counts = {}
 count = 0
 for record in SeqIO.parse(args.d, "fasta"):
     count += 1
     if count % 1000 == 0:
+        # TODO: measure memory consumption
         print(
             f"Processed {count} sequences, {len(distributions)} taxa so far",
             file=sys.stderr,
@@ -55,7 +57,10 @@ for record in SeqIO.parse(args.d, "fasta"):
     taxon = extract_taxon(record.description, rank)
     if taxon in distributions:
         distributions[taxon].add_sequence(record.seq)
+        genera_counts[taxon] += 1
     else:
-        # TODO: avoid N; now just checking RAM costs
-        distributions[taxon] = KmerTree(args.k, "NACTG", sequence=record.seq)
+        distributions[taxon] = KmerTree(
+            args.k, "ACTG", sequence=record.seq, ignored_chars="N"
+        )
+        genera_counts[taxon] = 1
 print(f"Loaded {count} sequences for {len(distributions)} taxa", file=sys.stderr)

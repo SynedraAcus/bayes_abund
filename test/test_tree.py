@@ -23,6 +23,12 @@ def test_seq_addition():
     assert t.get_count("GTG") == 0
 
 
+def test_addition_exc():
+    t = KmerTree(3, "ACTG", "ACACACC")
+    with pytest.raises(KmerTreeException):
+        t.add_sequence("ACACU")
+
+
 def test_freq():
     t = KmerTree(3, "ACTG", "ACACACC")
     assert t.get_freq("ACA") == 0.4
@@ -63,3 +69,15 @@ def test_method_exceptions():
         t.get_count("ACTG")
     with pytest.raises(KmerTreeException):
         t.get_seq_prob("ACUGACUUUC")
+
+
+def test_ignored_chars():
+    t = KmerTree(3, "ACTG", "ACTNACG", "N")
+    assert t.get_count("ACT") == 1
+    assert t.get_freq("ACT") == 0.2
+    assert t.get_count("ACG") == 1
+    assert t.get_freq("ACG") == 0.2
+    with pytest.raises(KmerTreeException):
+        assert t.get_count("CTN") == 0
+    with pytest.raises(KmerTreeException):
+        KmerTree(3, "ACTGN", "ACTNACG", "N")
